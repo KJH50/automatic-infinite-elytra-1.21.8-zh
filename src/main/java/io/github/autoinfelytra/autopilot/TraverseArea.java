@@ -1,12 +1,11 @@
 package io.github.autoinfelytra.autopilot;
 
 import io.github.autoinfelytra.AutomaticInfiniteElytra;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.ColumnPos;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ColumnPos;
 
 public class TraverseArea {
     private static ColumnPos starting;
@@ -39,12 +38,12 @@ public class TraverseArea {
         current+=4;
         if(current >= coordinates.size()){
             stop();
-            MinecraftClient.getInstance().player.sendMessage(Text.of("Done"), true);
+            Minecraft.getInstance().player.sendSystemMessage(Component.nullToEmpty("Done")); //true
             return;
         }
         Autopilot.unsetLocation();
         Autopilot.initNewFlight(AutomaticInfiniteElytra.blockPos(coordinates.get(current)), true);
-        MinecraftClient.getInstance().player.sendMessage(Text.of(String.valueOf(coordinates.get(current))), true);
+        Minecraft.getInstance().player.sendSystemMessage(Component.nullToEmpty(String.valueOf(coordinates.get(current)))); //true
     }
 
     public static List<ColumnPos> getCoordinates(ColumnPos pos1, ColumnPos pos2) {
@@ -55,7 +54,7 @@ public class TraverseArea {
         int minZ = Math.min(pos1.z(), pos2.z());
         int maxZ = Math.max(pos1.z(), pos2.z());
 
-        for (int x = minX; x <= maxX; x+=((MinecraftClient.getInstance().options.getClampedViewDistance()*16)-1)) {
+        for (int x = minX; x <= maxX; x+=((Minecraft.getInstance().options.getEffectiveRenderDistance()*16)-1)) {
             if (x % 2 == 0) {
                 for (int z = minZ; z <= maxZ; z++) {
                     coordinates.add(new ColumnPos(x, z));

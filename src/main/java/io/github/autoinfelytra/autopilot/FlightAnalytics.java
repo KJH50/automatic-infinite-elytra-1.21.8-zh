@@ -1,9 +1,9 @@
 package io.github.autoinfelytra.autopilot;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 public class FlightAnalytics {
     private static int startTime;
@@ -71,15 +71,15 @@ public class FlightAnalytics {
         return min + " min " + sec + " sec";
     }
 
-    public static void printAnalytics(PlayerEntity player){
-        int width = (int) Math.floor(MinecraftClient.getInstance().options.getChatWidth().getValue());
-        player.sendMessage(Text.literal(getSeperator(width, "-")), false);
-        player.sendMessage(Text.literal("Flight Analytics: ").formatted(Formatting.AQUA), false);
-        player.sendMessage(Text.literal("Distance Travelled: " + distance).formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal("Time Taken: " + getPresentableTime(time)).formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal("Average Speed: " + (distance/time) + " m/s").formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal("Elytra Durability Used: " + durability_lost).formatted(Formatting.WHITE), false);
-        player.sendMessage(Text.literal(getSeperator(width, "-")), false);
+    public static void printAnalytics(Player player){
+        int width = (int) Math.floor(Minecraft.getInstance().options.chatWidth().get());
+        player.sendSystemMessage(Component.literal(getSeperator(width, "-")));
+        player.sendSystemMessage(Component.literal("Flight Analytics: ").withStyle(ChatFormatting.AQUA));
+        player.sendSystemMessage(Component.literal("Distance Travelled: " + distance).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal("Time Taken: " + getPresentableTime(time)).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal("Average Speed: " + (distance/time) + " m/s").withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal("Elytra Durability Used: " + durability_lost).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.literal(getSeperator(width, "-")));
 
     }
 }

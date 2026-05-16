@@ -6,9 +6,11 @@ import dev.isxander.yacl3.config.v2.api.autogen.*;
 import dev.isxander.yacl3.config.v2.api.autogen.Boolean;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.Identifier;
+//import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.client.sounds.SoundEngine;
 
 import java.nio.file.Path;
 
@@ -16,7 +18,7 @@ public class AutomaticElytraConfig {
     public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("automatic_elytra_config.json");
 
     public static final ConfigClassHandler<AutomaticElytraConfig> HANDLER = ConfigClassHandler.createBuilder(AutomaticElytraConfig.class)
-            .id(Identifier.of("automatic-elytra", "config"))
+            .id(Identifier.fromNamespaceAndPath("automatic-elytra", "config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(CONFIG_PATH)
                     .build())

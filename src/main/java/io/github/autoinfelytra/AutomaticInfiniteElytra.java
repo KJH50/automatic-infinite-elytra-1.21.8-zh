@@ -1,7 +1,7 @@
 package io.github.autoinfelytra;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColumnPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ColumnPos;
 
 public class AutomaticInfiniteElytra {
     public static BlockPos blockPos(ColumnPos columnPos){

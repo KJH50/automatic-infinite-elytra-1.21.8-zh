@@ -3,15 +3,16 @@ package io.github.autoinfelytra.music;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.sound.SoundSystem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+//import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 
 @Environment(EnvType.CLIENT)
 public class MusicPlayer {
@@ -24,115 +25,115 @@ public class MusicPlayer {
     private static boolean isPlayingMusic = false;
     private static boolean firstSoundPlaying = false;
     private static int musicNumber = 1;
-    public static void playMusic(PlayerEntity player){
-        if(MinecraftClient.getInstance().options.getSoundVolumeOption(SoundCategory.MASTER).getValue() > 0) {
+    public static void playMusic(Player player){
+        if(Minecraft.getInstance().options.getSoundSourceOptionInstance(SoundSource.MASTER).get() > 0) {
             //PLAYING WAIT
             if (musicNumber == 1 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_wait_disc) {
-                    player.playSoundToPlayer(SoundEvents.MUSIC_DISC_WAIT.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SoundEvents.MUSIC_DISC_WAIT.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Wait"), true);
+                player.sendOverlayMessage(Component.literal("Playing Wait"));
                 incrementMusicNumberAndWrap();
             }
             //EMBARK
             if (musicNumber == 2 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_embark) {
-                    player.playSoundToPlayer(EMBARK, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(EMBARK, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Embark On A New Journey"), true);
+                player.sendOverlayMessage(Component.literal("Playing Embark On A New Journey"));
                 incrementMusicNumberAndWrap();
             }
             //SWEEPING CLOUDS
             if (musicNumber == 3 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_clouds) {
-                    player.playSoundToPlayer(SWEEPING_CLOUDS_SOUND, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SWEEPING_CLOUDS_SOUND, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Sweeping Through The Clouds"), true);
+                player.sendOverlayMessage(Component.literal("Playing Sweeping Through The Clouds"));
                 incrementMusicNumberAndWrap();
             }
             //OTHERSIDE
             if (musicNumber == 4 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_otherside_disc) {
-                    player.playSoundToPlayer(SoundEvents.MUSIC_DISC_OTHERSIDE.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SoundEvents.MUSIC_DISC_OTHERSIDE.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Otherside"), true);
+                player.sendOverlayMessage(Component.literal("Playing Otherside"));
                 incrementMusicNumberAndWrap();
             }
             //SUNSHINE
             if (musicNumber == 5 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_sunshine) {
-                    player.playSoundToPlayer(SUNSHINE, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SUNSHINE, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing The First Ray Of Sunshine"), true);
+                player.sendOverlayMessage(Component.literal("Playing The First Ray Of Sunshine"));
                 incrementMusicNumberAndWrap();
             }
             //PIGSTEP
             if (musicNumber == 6 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_pigstep_disc) {
-                    player.playSoundToPlayer(SoundEvents.MUSIC_DISC_PIGSTEP.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SoundEvents.MUSIC_DISC_PIGSTEP.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Pigstep"), true);
+                player.sendOverlayMessage(Component.literal("Playing Pigstep"));
                 incrementMusicNumberAndWrap();
             }
             //
             if (musicNumber == 7 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_mellohi_disc) {
-                    player.playSoundToPlayer(SoundEvents.MUSIC_DISC_MELLOHI.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(SoundEvents.MUSIC_DISC_MELLOHI.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Mellohi"), true);
+                player.sendOverlayMessage(Component.literal("Playing Mellohi"));
                 incrementMusicNumberAndWrap();
             }
             //FEELING
             if (musicNumber == 8 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_feeling) {
-                    player.playSoundToPlayer(FEELING, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(FEELING, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing A Feeling Like Never Before"), true);
+                player.sendOverlayMessage(Component.literal("Playing A Feeling Like Never Before"));
                 incrementMusicNumberAndWrap();
             }
             //HOMESICK
             if (musicNumber == 9 && !isPlayingMusic) {
                 if (AutomaticElytraConfig.HANDLER.instance().play_homesick) {
-                    player.playSoundToPlayer(HOMESICK, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
+                    player.playSound(HOMESICK, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Homesick"), true);
+                player.sendOverlayMessage(Component.literal("Playing Homesick"));
                 incrementMusicNumberAndWrap();
             }
 
-            isPlayingMusic = isSoundPlaying(EMBARK.id(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SWEEPING_CLOUDS_SOUND.id(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SUNSHINE.id(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SoundEvents.MUSIC_DISC_WAIT.registryKey().getValue(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SoundEvents.MUSIC_DISC_OTHERSIDE.registryKey().getValue(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SoundEvents.MUSIC_DISC_PIGSTEP.registryKey().getValue(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(SoundEvents.MUSIC_DISC_MELLOHI.registryKey().getValue(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(FEELING.id(), MinecraftClient.getInstance().getSoundManager().soundSystem)
-                    || isSoundPlaying(HOMESICK.id(), MinecraftClient.getInstance().getSoundManager().soundSystem);
+            isPlayingMusic = isSoundPlaying(EMBARK.location(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SWEEPING_CLOUDS_SOUND.location(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SUNSHINE.location(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SoundEvents.MUSIC_DISC_WAIT.key().registry(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SoundEvents.MUSIC_DISC_OTHERSIDE.key().registry(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SoundEvents.MUSIC_DISC_PIGSTEP.key().registry(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(SoundEvents.MUSIC_DISC_MELLOHI.key().registry(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(FEELING.location(), Minecraft.getInstance().getSoundManager().soundEngine)
+                    || isSoundPlaying(HOMESICK.location(), Minecraft.getInstance().getSoundManager().soundEngine);
         }
         else {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Music cannot play; your master volume is 0%"), true);
+            Minecraft.getInstance().player.sendOverlayMessage(Component.literal("Music cannot play; your master volume is 0%"));
         }
     }
 
     public static void stopAllMusic(){
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SoundEvents.MUSIC_DISC_WAIT.registryKey().getValue(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(EMBARK.id(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SWEEPING_CLOUDS_SOUND.id(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SoundEvents.MUSIC_DISC_OTHERSIDE.registryKey().getValue(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SUNSHINE.id(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SoundEvents.MUSIC_DISC_PIGSTEP.registryKey().getValue(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(SoundEvents.MUSIC_DISC_MELLOHI.registryKey().getValue(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(FEELING.id(), SoundCategory.MASTER);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(HOMESICK.id(), SoundCategory.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SoundEvents.MUSIC_DISC_WAIT.key().registry(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(EMBARK.location(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SWEEPING_CLOUDS_SOUND.location(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SoundEvents.MUSIC_DISC_OTHERSIDE.key().registry(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SUNSHINE.location(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SoundEvents.MUSIC_DISC_PIGSTEP.key().registry(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(SoundEvents.MUSIC_DISC_MELLOHI.key().registry(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(FEELING.location(), SoundSource.MASTER);
+        Minecraft.getInstance().getSoundManager().stop(HOMESICK.location(), SoundSource.MASTER);
         musicNumber = 1;
 
         isPlayingMusic = false;
@@ -142,9 +143,9 @@ public class MusicPlayer {
         return isPlayingMusic;
     }
 
-    public static boolean isSoundPlaying(Identifier id, SoundSystem soundSystem) {
-        for (SoundInstance soundInstance : soundSystem.sources.keySet()) {
-            if (soundInstance.getId().equals(id)) {
+    public static boolean isSoundPlaying(Identifier id, SoundEngine soundSystem) {
+        for (SoundInstance soundInstance : soundSystem.instanceToChannel.keySet()) {
+            if (soundInstance.getIdentifier().equals(id)) {
                 return true; // Found a matching sound identifier
             }
         }

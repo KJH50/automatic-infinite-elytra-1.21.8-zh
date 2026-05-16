@@ -4,11 +4,10 @@ import io.github.autoinfelytra.AutomaticInfiniteElytraClient;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+//import net.minecraft.client.gui.GuiGraphics; Missing type, I cannot find it
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -31,12 +30,12 @@ public class HUD {
             else hudColor = YELLOW_HUD_COLOR;
         } else hudArray = null;
     }
-    public static void drawHUD(DrawContext drawContext, RenderTickCounter renderTickCounter) {
+    public static void drawHUD(GuiGraphicsExtractor drawContext, DeltaTracker renderTickCounter) {
         //drawContext.draw();
         
-        MinecraftClient client = MinecraftClient.getInstance();
-        int sw = client.getWindow().getScaledWidth();
-        int sh = client.getWindow().getScaledHeight();
+        Minecraft client = Minecraft.getInstance();
+        int sw = client.getWindow().getGuiScaledWidth();
+        int sh = client.getWindow().getGuiScaledHeight();
 
         int x = (sw * AutomaticElytraConfig.HANDLER.instance().x_coordinates_of_hud) / 2000;
         int y = (sh * AutomaticElytraConfig.HANDLER.instance().y_coordinates_of_hud) / 2000;
@@ -44,8 +43,8 @@ public class HUD {
         //MinecraftClient.getInstance().player.sendMessage(Text.literal(String.valueOf((MinecraftClient.getInstance().getWindow().getHeight()))), true);
 
         //FLIGHT MODE
-        if(hudArray != null && hudArray.size() >= 1) drawContext.drawText(
-                MinecraftClient.getInstance().textRenderer,
+        if(hudArray != null && hudArray.size() >= 1) drawContext.text(
+                Minecraft.getInstance().font,
                 hudArray.get(0),
                 x,
                 (int) (y + AutomaticElytraConfig.HANDLER.instance().distance_between_sentences * -2),
@@ -53,8 +52,8 @@ public class HUD {
                 true);
 
         //ALTITUDE
-        if(hudArray != null && hudArray.size() >= 2) drawContext.drawText(
-                MinecraftClient.getInstance().textRenderer,
+        if(hudArray != null && hudArray.size() >= 2) drawContext.text(
+                Minecraft.getInstance().font,
                 hudArray.get(1),
                 x,
                 (int) (y + AutomaticElytraConfig.HANDLER.instance().distance_between_sentences * -1),
@@ -62,8 +61,8 @@ public class HUD {
                 true);
 
         //SPEED
-        if(hudArray != null && hudArray.size() >= 3) drawContext.drawText(
-                MinecraftClient.getInstance().textRenderer,
+        if(hudArray != null && hudArray.size() >= 3) drawContext.text(
+                Minecraft.getInstance().font,
                 hudArray.get(2),
                 x,
                 (int) (y + AutomaticElytraConfig.HANDLER.instance().distance_between_sentences * 0),
@@ -71,8 +70,8 @@ public class HUD {
                 true);
 
         //ELYTRA DURABILITY
-        if(hudArray != null && hudArray.size() >= 4) drawContext.drawText(
-                MinecraftClient.getInstance().textRenderer,
+        if(hudArray != null && hudArray.size() >= 4) drawContext.text(
+                Minecraft.getInstance().font,
                 hudArray.get(3),
                 x,
                 (int) (y + AutomaticElytraConfig.HANDLER.instance().distance_between_sentences * 1),
@@ -80,8 +79,8 @@ public class HUD {
                 true);
 
         //AUTOPILOT
-        if(hudArray != null && hudArray.size() >= 5) drawContext.drawText(
-                MinecraftClient.getInstance().textRenderer,
+        if(hudArray != null && hudArray.size() >= 5) drawContext.text(
+                Minecraft.getInstance().font,
                 hudArray.get(4),
                 x,
                 (int) (y + AutomaticElytraConfig.HANDLER.instance().distance_between_sentences * 2),

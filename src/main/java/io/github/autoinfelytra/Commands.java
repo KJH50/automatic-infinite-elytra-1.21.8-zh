@@ -8,17 +8,16 @@ import io.github.autoinfelytra.autopilot.TraverseArea;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ColumnPos;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ColumnPos;
 
 public class Commands {
     @Environment(EnvType.CLIENT)
@@ -30,8 +29,8 @@ public class Commands {
         CommandRegistrationCallback.EVENT.register(Commands::analyticsCommand);
     }
 
-    private static void SetLastDestinationCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess) {
-        fabricClientCommandSourceCommandDispatcher.register(ClientCommandManager.literal("setDestination")
+    private static void SetLastDestinationCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess) {
+        fabricClientCommandSourceCommandDispatcher.register(ClientCommands.literal("setDestination")
             .executes(context -> {
                 assert context.getSource().getPlayer() != null;
                 BlockPos pos = Autopilot.getPrevDestination();
@@ -39,18 +38,18 @@ public class Commands {
                     if(AutomaticInfiniteElytraClient.autoFlight) {
                         Autopilot.initNewFlight(pos, false);
                         TraverseArea.stop();
-                        context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).formatted(Formatting.GREEN), true);
+                        context.getSource().getPlayer().sendOverlayMessage(Component.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).withStyle(ChatFormatting.GREEN));
                     }
-                    else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED), true);
+                    else context.getSource().getPlayer().sendOverlayMessage(Component.literal("You need to be flying and have Automatic Flight Mode enabled.").withStyle(ChatFormatting.RED));
                 }
-                else context.getSource().getPlayer().sendMessage(Text.literal("Previous destination is null").formatted(Formatting.RED), true);
+                else context.getSource().getPlayer().sendOverlayMessage(Component.literal("Previous destination is null").withStyle(ChatFormatting.RED));
                 return 1;
             }));
     }
 
-    private static void SetDestinationCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess) {
-        fabricClientCommandSourceCommandDispatcher.register(ClientCommandManager.literal("setDestination")
-            .then(ClientCommandManager.argument("destination", CColumnPosArgument.columnPos())
+    private static void SetDestinationCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess) {
+        fabricClientCommandSourceCommandDispatcher.register(ClientCommands.literal("setDestination")
+            .then(ClientCommands.argument("destination", CColumnPosArgument.columnPos())
                 .executes(context -> {
                     assert context.getSource().getPlayer() != null;
                     //BlockPos pos = CBlockPosArgument.getBlockPos(context, "Z");
@@ -60,28 +59,28 @@ public class Commands {
                         if(AutomaticInfiniteElytraClient.autoFlight) {
                             Autopilot.initNewFlight(pos, false);
                             TraverseArea.stop();
-                            context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).formatted(Formatting.GREEN), true);
+                            context.getSource().getPlayer().sendOverlayMessage(Component.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).withStyle(ChatFormatting.GREEN));
                         }
-                        else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED), true);
+                        else context.getSource().getPlayer().sendOverlayMessage(Component.literal("You need to be flying and have Automatic Flight Mode enabled.").withStyle(ChatFormatting.RED));
                     }
-                    else context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is disabled. Please enable it in the Config.").formatted(Formatting.RED), true);
+                    else context.getSource().getPlayer().sendOverlayMessage(Component.literal("Autopilot is disabled. Please enable it in the Config.").withStyle(ChatFormatting.RED));
                    return 1;
         })));
     }
 
-    private static void unsetDestinationCommand(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        serverCommandSourceCommandDispatcher.register(CommandManager.literal("removeDestination")
+    private static void unsetDestinationCommand(CommandDispatcher<CommandSourceStack> serverCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess, net.minecraft.commands.Commands.CommandSelection registrationEnvironment) {
+        serverCommandSourceCommandDispatcher.register(net.minecraft.commands.Commands.literal("removeDestination")
                 .executes(context -> {
                     Autopilot.unsetLocation();
-                    context.getSource().getPlayer().sendMessage(Text.literal("Autopilot deactivated."));
+                    context.getSource().getPlayer().sendSystemMessage(Component.literal("Autopilot deactivated."));
                     return 0;
                 }));
     }
 
-    private static void traverseAreaCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess) {
-        fabricClientCommandSourceCommandDispatcher.register(ClientCommandManager.literal("exploreArea")
-                .then(ClientCommandManager.argument("starting", CColumnPosArgument.columnPos())
-                        .then(ClientCommandManager.argument("ending", CColumnPosArgument.columnPos())
+    private static void traverseAreaCommand(CommandDispatcher<FabricClientCommandSource> fabricClientCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess) {
+        fabricClientCommandSourceCommandDispatcher.register(ClientCommands.literal("exploreArea")
+                .then(ClientCommands.argument("starting", CColumnPosArgument.columnPos())
+                        .then(ClientCommands.argument("ending", CColumnPosArgument.columnPos())
                             .executes(context -> {
                                 assert context.getSource().getPlayer() != null;
                                 //BlockPos pos = CBlockPosArgument.getBlockPos(context, "Z");
@@ -89,25 +88,25 @@ public class Commands {
                                 ColumnPos ending = CColumnPosArgument.getColumnPos(context, "ending");
                                     if(AutomaticInfiniteElytraClient.autoFlight) {
                                         TraverseArea.init(starting, ending);
-                                        context.getSource().getPlayer().sendMessage(Text.literal("Area traversal in progress").formatted(Formatting.GREEN), true);
+                                        context.getSource().getPlayer().sendOverlayMessage(Component.literal("Area traversal in progress").withStyle(ChatFormatting.GREEN));
                                     }
-                                    else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED), true);
+                                    else context.getSource().getPlayer().sendOverlayMessage(Component.literal("You need to be flying and have Automatic Flight Mode enabled.").withStyle(ChatFormatting.RED));
                                 return 1;
                             }))));
     }
 
 
-    private static void analyticsCommand(CommandDispatcher<ServerCommandSource> serverCommandSourceCommandDispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        serverCommandSourceCommandDispatcher.register(CommandManager.literal("flightanalytics")
+    private static void analyticsCommand(CommandDispatcher<CommandSourceStack> serverCommandSourceCommandDispatcher, CommandBuildContext commandRegistryAccess, net.minecraft.commands.Commands.CommandSelection registrationEnvironment) {
+        serverCommandSourceCommandDispatcher.register(net.minecraft.commands.Commands.literal("flightanalytics")
                 .executes(context -> {
                     if(FlightAnalytics.isCompletedFlight() && AutomaticElytraConfig.HANDLER.instance().record_analytics){
-                        context.getSource().getPlayer().sendMessage(Text.literal("-"));
-                        context.getSource().getPlayer().sendMessage(Text.literal("Getting Analytics"));
+                        context.getSource().getPlayer().sendSystemMessage(Component.literal("-"));
+                        context.getSource().getPlayer().sendSystemMessage(Component.literal("Getting Analytics"));
                         FlightAnalytics.printAnalytics(context.getSource().getPlayer());
                     }
                     else {
-                        context.getSource().getPlayer().sendMessage(Text.literal("Flight data is unavailable").formatted(Formatting.RED));
-                        context.getSource().getPlayer().sendMessage(Text.literal("This might be because you haven't flown yet, or Analytics is disabled in your config").formatted(Formatting.WHITE));
+                        context.getSource().getPlayer().sendSystemMessage(Component.literal("Flight data is unavailable").withStyle(ChatFormatting.RED));
+                        context.getSource().getPlayer().sendSystemMessage(Component.literal("This might be because you haven't flown yet, or Analytics is disabled in your config").withStyle(ChatFormatting.WHITE));
                     }
                     return 0;
                 }));

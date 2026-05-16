@@ -1,5 +1,6 @@
 package io.github.autoinfelytra;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import io.github.autoinfelytra.autopilot.Autopilot;
 import io.github.autoinfelytra.autopilot.CollisionDetectionUtil;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
@@ -10,15 +11,15 @@ import io.github.autoinfelytra.music.MusicPlayer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+//import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,9 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
     public static final String MOD_ID = "autoinfelytra";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    private static KeyBinding keyBinding;
+    private static KeyMapping keyBinding;
+    // registering the keymapping category (new to 26.1.2)
+    public static final KeyMapping.Category KEY_AUTO_ELYTRA_CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(MOD_ID, "text.elytraautoflight.title"));
     public static AutomaticInfiniteElytraClient instance;
 
     private static boolean lastPressed = false;
@@ -53,12 +56,12 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
     public static final int rotationAmount = 180/CollisionDetectionUtil.scanAheadTicks;
     public static int rotationStage = 0;
 
-    private static MinecraftClient minecraftClient;
+    private static Minecraft minecraftClient;
 
     public static boolean showHud;
     public static boolean autoFlight;
 
-    private static Vec3d previousPosition;
+    private static Vec3 previousPosition;
     private static double currentVelocity;
 
     public static boolean isDescending;
@@ -84,14 +87,14 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
         Autopilot.init();
         HUDHelper.init();
 
-        keyBinding = new KeyBinding(
+        keyBinding = new KeyMapping(
                 "key.elytraautoflight.toggle", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+                InputConstants.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
                 GLFW.GLFW_KEY_RIGHT_ALT, // The keycode of the key
-                "text.elytraautoflight.title" // The translation key of the keybinding's category.
+                KEY_AUTO_ELYTRA_CATEGORY // The translation key of the keybinding's category.
         );
 
-        KeyBindingHelper.registerKeyBinding(keyBinding);
+        KeyMappingHelper.registerKeyMapping(keyBinding);
 
         lastPressed = false;
         ClientTickEvents.END_CLIENT_TICK.register(e -> {
@@ -101,7 +104,7 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
             else if(MusicPlayer.isPlayingMusic()) MusicPlayer.stopAllMusic();
         });
         HudElementRegistry.addLast(
-            Identifier.of("autoinfelytra", "hud"),
+            Identifier.fromNamespaceAndPath("autoinfelytra", "hud"),
             (drawContext, tickCounter) -> HUD.drawHUD(drawContext, tickCounter)
         );
 
@@ -109,55 +112,55 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
         LOGGER.info("I believe I can fly...");
     }
 
-    public static void rotatePlayer(MinecraftClient minecraftClient){
+    public static void rotatePlayer(Minecraft minecraftClient){
         assert minecraftClient.player != null;
         Random random = new Random();
         int randomPitch = random.nextInt(2) - 1;
         if(rotating) {
-            minecraftClient.player.setYaw((float) (minecraftClient.player.getYaw(0) + rotationAmount + (Math.random() * 2)));
-            minecraftClient.player.setPitch(minecraftClient.player.getPitch() + randomPitch);
-            minecraftClient.player.sendMessage(Text.literal("Taking evasive action! ").formatted(Formatting.RED), true);
+            minecraftClient.player.setYRot((float) (minecraftClient.player.getViewYRot(0) + rotationAmount + (Math.random() * 2)));
+            minecraftClient.player.setXRot(minecraftClient.player.getXRot() + randomPitch);
+            minecraftClient.player.sendOverlayMessage(Component.literal("Taking evasive action! ").withStyle(ChatFormatting.RED));
             autoFlight = false;
             rotationStage++;
-            minecraftClient.player.stopGliding();
+            minecraftClient.player.stopFallFlying();
         }
         if(rotationStage >= CollisionDetectionUtil.scanAheadTicks){
             rotating = false;
             rotationStage = 0;
-            if(minecraftClient.player.checkGliding()) minecraftClient.player.startGliding();
+            if(minecraftClient.player.tryToStartFallFlying()) minecraftClient.player.startFallFlying();
         }
     }
 
     private static void onTick() {
-        if(minecraftClient == null) minecraftClient = MinecraftClient.getInstance();
+        if(minecraftClient == null) minecraftClient = Minecraft.getInstance();
         if (minecraftClient.player != null) {
             rotatePlayer(minecraftClient);
-            if (minecraftClient == null) minecraftClient = MinecraftClient.getInstance();
-            if (minecraftClient.player.isGliding()) showHud = true;
+            if (minecraftClient == null) minecraftClient = Minecraft.getInstance();
+            if (minecraftClient.player.isFallFlying()) showHud = true;
                 else {
                     showHud = false;
                     autoFlight = false;
                 }
-                if (minecraftClient.getDebugHud().shouldShowDebugHud())
+                if (minecraftClient.getDebugOverlay().showDebugScreen())
                     showHud = false;
 
-            if (!lastPressed && keyBinding.isPressed()) {
-                if (minecraftClient.player.isGliding()) {
+            if (!lastPressed && keyBinding.isDown()) {
+                if (minecraftClient.player.isFallFlying()) {
                     // If the player is flying an elytra, we start the auto flight
                     autoFlight = !autoFlight;
                     if (autoFlight) isDescending = true;
                     else Autopilot.stop();
                 } else {
-                    minecraftClient.player.sendMessage(Text.literal("[Automatic Infinite Elytra] ").formatted(Formatting.AQUA).append(Text.literal("You need to be flying!")).formatted(Formatting.RED), false); // Send a message to the player
+                    minecraftClient.player.sendSystemMessage(Component.literal("[Automatic Infinite Elytra] ").withStyle(ChatFormatting.AQUA).append(Component.literal("You need to be flying!")).withStyle(ChatFormatting.RED)); // Send a message to the player
                 }
             }
-            lastPressed = keyBinding.isPressed();
+            lastPressed = keyBinding.isDown();
 
 
             if (autoFlight) {
-                assert minecraftClient.world != null;
+                assert minecraftClient.level != null;
                 if (AutomaticElytraConfig.HANDLER.instance().anti_collision)
-                    CollisionDetectionUtil.cancelFlightIfObstacleDetected(minecraftClient.player, minecraftClient.world);
+                    CollisionDetectionUtil.cancelFlightIfObstacleDetected(minecraftClient.player, minecraftClient.level);
                 if (HUDHelper.getAltitude() >= AutomaticElytraConfig.HANDLER.instance().max_altitude)
                     isDescending = true;
                 if (isDescending) {
@@ -179,14 +182,14 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
                 }
 
                 if (pullUp) {
-                    minecraftClient.player.pitch -= pullUpSpeed;
-                    if (minecraftClient.player.pitch <= pullUpAngle) minecraftClient.player.pitch = (float) pullUpAngle;
+                    minecraftClient.player.xRot -= pullUpSpeed;
+                    if (minecraftClient.player.xRot <= pullUpAngle) minecraftClient.player.xRot = (float) pullUpAngle;
                 }
 
                 if (pullDown) {
-                    minecraftClient.player.pitch += pullDownSpeed;
-                    if (minecraftClient.player.pitch >= pullDownAngle)
-                        minecraftClient.player.pitch = (float) pullDownAngle;
+                    minecraftClient.player.xRot += pullDownSpeed;
+                    if (minecraftClient.player.xRot >= pullDownAngle)
+                        minecraftClient.player.xRot = (float) pullDownAngle;
                 }
             } else {
                 pullUp = false;
@@ -207,10 +210,10 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
 
     private static void computeVelocity()
     {
-        Vec3d newPosition = minecraftClient.player.getPos();
+        Vec3 newPosition = minecraftClient.player.position();
         if (previousPosition == null)
             previousPosition = newPosition;
-        Vec3d difference = new Vec3d(newPosition.x - previousPosition.x, newPosition.y - previousPosition.y, newPosition.z - previousPosition.z);
+        Vec3 difference = new Vec3(newPosition.x - previousPosition.x, newPosition.y - previousPosition.y, newPosition.z - previousPosition.z);
         previousPosition = newPosition;
         currentVelocity = difference.length();
     }

@@ -1,7 +1,7 @@
-accessWidener v2 named
-accessible field net/minecraft/entity/Entity pitch F
-accessible field net/minecraft/client/util/Window scaledWidth I
-accessible field net/minecraft/client/util/Window scaledHeight I
-accessible field net/minecraft/client/sound/SoundManager soundSystem Lnet/minecraft/client/sound/SoundSystem;
-accessible field net/minecraft/client/sound/SoundSystem sounds Lcom/google/common/collect/Multimap;
-accessible field net/minecraft/client/sound/SoundSystem sources Ljava/util/Map;
+accessWidener v2 official
+accessible field net/minecraft/world/entity/Entity xRot F
+accessible field com/mojang/blaze3d/platform/Window guiScaledWidth I
+accessible field com/mojang/blaze3d/platform/Window guiScaledHeight I
+accessible field net/minecraft/client/sounds/SoundManager soundEngine Lnet/minecraft/client/sounds/SoundEngine;
+accessible field net/minecraft/client/sounds/SoundEngine instanceBySource Lcom/google/common/collect/Multimap;
+accessible field net/minecraft/client/sounds/SoundEngine instanceToChannel Ljava/util/Map;
