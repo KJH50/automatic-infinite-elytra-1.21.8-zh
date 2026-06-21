@@ -25,8 +25,8 @@ public class CollisionDetectionUtil {
         Vec3i vec3i = new Vec3i((int) futurePos.x, (int) futurePos.y, (int) futurePos.z);
         BlockPos blockPos = new BlockPos(vec3i);
         if (world.getBlockState(blockPos).isSolid()) {
-            player.sendMessage(Text.literal("[Collision Detection Utility] ").formatted(Formatting.AQUA).append(Text.literal("Flight aborted due to obstacle ahead!")), false); // Send a message to the player
-            player.sendMessage(Text.literal("Consider using fireworks to boost your height before enabling automatic flight"));
+            player.sendMessage(Text.translatable("msg.autoinfelytra.collision.prefix").formatted(Formatting.AQUA).append(Text.translatable("msg.autoinfelytra.collision.aborted")), false);
+            player.sendMessage(Text.translatable("msg.autoinfelytra.collision.hint"));
             AutomaticInfiniteElytraClient.rotating = true;
         }
     }

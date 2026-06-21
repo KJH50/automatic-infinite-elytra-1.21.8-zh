@@ -39,11 +39,11 @@ public class Commands {
                     if(AutomaticInfiniteElytraClient.autoFlight) {
                         Autopilot.initNewFlight(pos, false);
                         TraverseArea.stop();
-                        context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).formatted(Formatting.GREEN));
+                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.autopilot.set", pos.getX(), pos.getZ()).formatted(Formatting.GREEN));
                     }
-                    else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED));
+                    else context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.error.not_flying").formatted(Formatting.RED));
                 }
-                else context.getSource().getPlayer().sendMessage(Text.literal("Previous destination is null").formatted(Formatting.RED));
+                else context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.error.no_prev_dest").formatted(Formatting.RED));
                 return 1;
             }));
     }
@@ -60,11 +60,11 @@ public class Commands {
                         if(AutomaticInfiniteElytraClient.autoFlight) {
                             Autopilot.initNewFlight(pos, false);
                             TraverseArea.stop();
-                            context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is set to coordinates " + pos.getX() + " " + pos.getZ()).formatted(Formatting.GREEN));
+                            context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.autopilot.set", pos.getX(), pos.getZ()).formatted(Formatting.GREEN));
                         }
-                        else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED));
+                        else context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.error.not_flying").formatted(Formatting.RED));
                     }
-                    else context.getSource().getPlayer().sendMessage(Text.literal("Autopilot is disabled. Please enable it in the Config.").formatted(Formatting.RED));
+                    else context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.error.autopilot_disabled").formatted(Formatting.RED));
                    return 1;
         })));
     }
@@ -73,7 +73,7 @@ public class Commands {
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("removeDestination")
                 .executes(context -> {
                     Autopilot.unsetLocation();
-                    context.getSource().getPlayer().sendMessage(Text.literal("Autopilot deactivated."));
+                    context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.autopilot.deactivated"));
                     return 0;
                 }));
     }
@@ -89,9 +89,9 @@ public class Commands {
                                 ColumnPos ending = CColumnPosArgument.getColumnPos(context, "ending");
                                     if(AutomaticInfiniteElytraClient.autoFlight) {
                                         TraverseArea.init(starting, ending);
-                                        context.getSource().getPlayer().sendMessage(Text.literal("Area traversal in progress").formatted(Formatting.GREEN));
+                                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.area.traversal_started").formatted(Formatting.GREEN));
                                     }
-                                    else context.getSource().getPlayer().sendMessage(Text.literal("You need to be flying and have Automatic Flight Mode enabled.").formatted(Formatting.RED));
+                                    else context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.error.not_flying").formatted(Formatting.RED));
                                 return 1;
                             }))));
     }
@@ -101,13 +101,13 @@ public class Commands {
         serverCommandSourceCommandDispatcher.register(CommandManager.literal("flightanalytics")
                 .executes(context -> {
                     if(FlightAnalytics.isCompletedFlight() && AutomaticElytraConfig.HANDLER.instance().record_analytics){
-                        context.getSource().getPlayer().sendMessage(Text.literal("-"));
-                        context.getSource().getPlayer().sendMessage(Text.literal("Getting Analytics"));
+                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.analytics.separator"));
+                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.analytics.header"));
                         FlightAnalytics.printAnalytics(context.getSource().getPlayer());
                     }
                     else {
-                        context.getSource().getPlayer().sendMessage(Text.literal("Flight data is unavailable").formatted(Formatting.RED));
-                        context.getSource().getPlayer().sendMessage(Text.literal("This might be because you haven't flown yet, or Analytics is disabled in your config").formatted(Formatting.WHITE));
+                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.analytics.unavailable").formatted(Formatting.RED));
+                        context.getSource().getPlayer().sendMessage(Text.translatable("msg.autoinfelytra.analytics.unavailable_hint").formatted(Formatting.WHITE));
                     }
                     return 0;
                 }));

@@ -112,7 +112,7 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
         if(rotating) {
             minecraftClient.player.setYaw((float) (minecraftClient.player.getYaw(0) + rotationAmount + (Math.random() * 2)));
             minecraftClient.player.setPitch(minecraftClient.player.getPitch() + randomPitch);
-            minecraftClient.player.sendMessage(Text.literal("Taking evasive action! ").formatted(Formatting.RED), true);
+            minecraftClient.player.sendMessage(Text.translatable("msg.autoinfelytra.evasive").formatted(Formatting.RED), true);
             autoFlight = false;
             rotationStage++;
             minecraftClient.player.stopFallFlying();
@@ -144,7 +144,7 @@ public class AutomaticInfiniteElytraClient implements net.fabricmc.api.ClientMod
                     if (autoFlight) isDescending = true;
                     else Autopilot.stop();
                 } else {
-                    minecraftClient.player.sendMessage(Text.literal("[Automatic Infinite Elytra] ").formatted(Formatting.AQUA).append(Text.literal("You need to be flying!")).formatted(Formatting.RED), false); // Send a message to the player
+                    minecraftClient.player.sendMessage(Text.translatable("msg.autoinfelytra.prefix").formatted(Formatting.AQUA).append(Text.translatable("msg.autoinfelytra.error.not_flying_short").formatted(Formatting.RED)), false); // Send a message to the player
                 }
             }
             lastPressed = keyBinding.isPressed();

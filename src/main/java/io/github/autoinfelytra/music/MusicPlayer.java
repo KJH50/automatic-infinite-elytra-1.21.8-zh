@@ -32,7 +32,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SoundEvents.MUSIC_DISC_WAIT.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Wait"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_wait"), true);
                 incrementMusicNumberAndWrap();
             }
             //EMBARK
@@ -41,7 +41,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(EMBARK, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Embark On A New Journey"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_embark"), true);
                 incrementMusicNumberAndWrap();
             }
             //SWEEPING CLOUDS
@@ -50,7 +50,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SWEEPING_CLOUDS_SOUND, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Sweeping Through The Clouds"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_clouds"), true);
                 incrementMusicNumberAndWrap();
             }
             //OTHERSIDE
@@ -59,7 +59,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SoundEvents.MUSIC_DISC_OTHERSIDE.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Otherside"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_otherside"), true);
                 incrementMusicNumberAndWrap();
             }
             //SUNSHINE
@@ -68,7 +68,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SUNSHINE, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing The First Ray Of Sunshine"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_sunshine"), true);
                 incrementMusicNumberAndWrap();
             }
             //PIGSTEP
@@ -77,7 +77,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SoundEvents.MUSIC_DISC_PIGSTEP.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Pigstep"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_pigstep"), true);
                 incrementMusicNumberAndWrap();
             }
             //
@@ -86,7 +86,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(SoundEvents.MUSIC_DISC_MELLOHI.value(), SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Mellohi"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_mellohi"), true);
                 incrementMusicNumberAndWrap();
             }
             //FEELING
@@ -95,7 +95,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(FEELING, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing A Feeling Like Never Before"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_feeling"), true);
                 incrementMusicNumberAndWrap();
             }
             //HOMESICK
@@ -104,7 +104,7 @@ public class MusicPlayer {
                     player.playSoundToPlayer(HOMESICK, SoundCategory.MASTER, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendMessage(Text.literal("Playing Homesick"), true);
+                player.sendMessage(Text.translatable("msg.autoinfelytra.music.playing_homesick"), true);
                 incrementMusicNumberAndWrap();
             }
 
@@ -119,7 +119,7 @@ public class MusicPlayer {
                     || isSoundPlaying(HOMESICK.getId(), MinecraftClient.getInstance().getSoundManager().soundSystem);
         }
         else {
-            MinecraftClient.getInstance().player.sendMessage(Text.literal("Music cannot play; your master volume is 0%"), true);
+            MinecraftClient.getInstance().player.sendMessage(Text.translatable("msg.autoinfelytra.music.volume_zero"), true);
         }
     }
 

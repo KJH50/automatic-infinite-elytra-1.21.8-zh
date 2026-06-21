@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
 
@@ -19,7 +20,7 @@ public class HUD {
     public static final int YELLOW_HUD_COLOR = Objects.requireNonNull(TextColor.fromFormatting(Formatting.YELLOW)).getRgb();
     public static final int GREEN_HUD_COLOR = Objects.requireNonNull(TextColor.fromFormatting(Formatting.GREEN)).getRgb();
 
-    public static ArrayList<String> hudArray;
+    public static ArrayList<Text> hudArray;
     public static int hudColor = RED_HUD_COLOR;
     public static final int HUD_ELEMENTS = 5;
 
@@ -35,8 +36,6 @@ public class HUD {
 
         int x = (MinecraftClient.getInstance().getWindow().getWidth() * AutomaticElytraConfig.HANDLER.instance().x_coordinates_of_hud)/2000;
         int y = ((MinecraftClient.getInstance().getWindow().getHeight()) * AutomaticElytraConfig.HANDLER.instance().y_coordinates_of_hud)/2000;
-
-        //MinecraftClient.getInstance().player.sendMessage(Text.literal(String.valueOf((MinecraftClient.getInstance().getWindow().getHeight()))), true);
 
         //FLIGHT MODE
         if(hudArray != null && hudArray.size() >= 1) drawContext.drawText(

@@ -1,4 +1,4 @@
-package io.github.autoinfelytra.autopilot;
+﻿package io.github.autoinfelytra.autopilot;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +60,7 @@ public class FlightAnalytics {
         return new String(new char[count]).replace("\0", with);
     }
 
-    public static String getPresentableTime(int t){
+    public static int[] getPresentableTime(int t){
         int min = 0;
         int sec = 0;
         if(t >= 60) {
@@ -68,17 +68,18 @@ public class FlightAnalytics {
         }
         sec = t % 60;
 
-        return min + " min " + sec + " sec";
+        return new int[]{min, sec};
     }
 
     public static void printAnalytics(PlayerEntity player){
         int width = (int) Math.floor(MinecraftClient.getInstance().options.getChatWidth().getValue());
         player.sendMessage(Text.literal(getSeperator(width, "-")));
-        player.sendMessage(Text.literal("Flight Analytics: ").formatted(Formatting.AQUA));
-        player.sendMessage(Text.literal("Distance Travelled: " + distance).formatted(Formatting.WHITE));
-        player.sendMessage(Text.literal("Time Taken: " + getPresentableTime(time)).formatted(Formatting.WHITE));
-        player.sendMessage(Text.literal("Average Speed: " + (distance/time) + " m/s").formatted(Formatting.WHITE));
-        player.sendMessage(Text.literal("Elytra Durability Used: " + durability_lost).formatted(Formatting.WHITE));
+        player.sendMessage(Text.translatable("msg.autoinfelytra.analytics.title").formatted(Formatting.AQUA));
+        player.sendMessage(Text.translatable("msg.autoinfelytra.analytics.distance", distance).formatted(Formatting.WHITE));
+        int[] minSec = getPresentableTime(time);
+        player.sendMessage(Text.translatable("msg.autoinfelytra.analytics.time", minSec[0], minSec[1]).formatted(Formatting.WHITE));
+        player.sendMessage(Text.translatable("msg.autoinfelytra.analytics.avg_speed", (distance/time)).formatted(Formatting.WHITE));
+        player.sendMessage(Text.translatable("msg.autoinfelytra.analytics.durability", durability_lost).formatted(Formatting.WHITE));
         player.sendMessage(Text.literal(getSeperator(width, "-")));
 
     }
