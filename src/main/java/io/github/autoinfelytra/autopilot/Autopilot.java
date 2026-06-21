@@ -112,7 +112,7 @@ public class Autopilot {
         if (isAtDestination()) {
             destination = null;
             if(!TraverseArea.isTraversalInProgress()){
-                player.sendOverlayMessage(Component.literal("[Automatic Elytra Autopilot] You have arrived").withStyle(ChatFormatting.GREEN));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.autopilot.arrived").withStyle(ChatFormatting.GREEN));
                 if(AutomaticElytraConfig.HANDLER.instance().record_analytics) {
                     FlightAnalytics.setTime((player.tickCount - FlightAnalytics.getStartTime()) / 20);
                     FlightAnalytics.setDurability_lost(player.getItemBySlot(EquipmentSlot.CHEST).get(DataComponents.DAMAGE) - FlightAnalytics.getStartDurability());
@@ -122,7 +122,7 @@ public class Autopilot {
                 }
 
                 if(shouldLand()) {
-                    player.sendOverlayMessage(Component.literal("[Automatic Elytra Autopilot] Initiating landing procedures").withStyle(ChatFormatting.GREEN));
+                    player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.autopilot.landing").withStyle(ChatFormatting.GREEN));
                     landing = true;
                     initLanding();
                 }

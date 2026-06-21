@@ -60,7 +60,7 @@ public class FlightAnalytics {
         return new String(new char[count]).replace("\0", with);
     }
 
-    public static String getPresentableTime(int t){
+    public static int[] getPresentableTime(int t){
         int min = 0;
         int sec = 0;
         if(t >= 60) {
@@ -68,17 +68,18 @@ public class FlightAnalytics {
         }
         sec = t % 60;
 
-        return min + " min " + sec + " sec";
+        return new int[]{min, sec};
     }
 
     public static void printAnalytics(Player player){
         int width = (int) Math.floor(Minecraft.getInstance().options.chatWidth().get());
+        int[] minSec = getPresentableTime(time);
         player.sendSystemMessage(Component.literal(getSeperator(width, "-")));
-        player.sendSystemMessage(Component.literal("Flight Analytics: ").withStyle(ChatFormatting.AQUA));
-        player.sendSystemMessage(Component.literal("Distance Travelled: " + distance).withStyle(ChatFormatting.WHITE));
-        player.sendSystemMessage(Component.literal("Time Taken: " + getPresentableTime(time)).withStyle(ChatFormatting.WHITE));
-        player.sendSystemMessage(Component.literal("Average Speed: " + (distance/time) + " m/s").withStyle(ChatFormatting.WHITE));
-        player.sendSystemMessage(Component.literal("Elytra Durability Used: " + durability_lost).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.translatable("msg.autoinfelytra.analytics.title").withStyle(ChatFormatting.AQUA));
+        player.sendSystemMessage(Component.translatable("msg.autoinfelytra.analytics.distance", distance).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.translatable("msg.autoinfelytra.analytics.time", minSec[0], minSec[1]).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.translatable("msg.autoinfelytra.analytics.avg_speed", (distance/time)).withStyle(ChatFormatting.WHITE));
+        player.sendSystemMessage(Component.translatable("msg.autoinfelytra.analytics.durability", durability_lost).withStyle(ChatFormatting.WHITE));
         player.sendSystemMessage(Component.literal(getSeperator(width, "-")));
 
     }

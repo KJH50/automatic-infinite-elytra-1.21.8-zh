@@ -33,7 +33,7 @@ public class MusicPlayer {
                     player.playSound(SoundEvents.MUSIC_DISC_WAIT.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Wait"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_wait"));
                 incrementMusicNumberAndWrap();
             }
             //EMBARK
@@ -42,7 +42,7 @@ public class MusicPlayer {
                     player.playSound(EMBARK, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Embark On A New Journey"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_embark"));
                 incrementMusicNumberAndWrap();
             }
             //SWEEPING CLOUDS
@@ -51,7 +51,7 @@ public class MusicPlayer {
                     player.playSound(SWEEPING_CLOUDS_SOUND, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Sweeping Through The Clouds"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_clouds"));
                 incrementMusicNumberAndWrap();
             }
             //OTHERSIDE
@@ -60,7 +60,7 @@ public class MusicPlayer {
                     player.playSound(SoundEvents.MUSIC_DISC_OTHERSIDE.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Otherside"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_otherside"));
                 incrementMusicNumberAndWrap();
             }
             //SUNSHINE
@@ -69,7 +69,7 @@ public class MusicPlayer {
                     player.playSound(SUNSHINE, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing The First Ray Of Sunshine"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_sunshine"));
                 incrementMusicNumberAndWrap();
             }
             //PIGSTEP
@@ -78,7 +78,7 @@ public class MusicPlayer {
                     player.playSound(SoundEvents.MUSIC_DISC_PIGSTEP.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Pigstep"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_pigstep"));
                 incrementMusicNumberAndWrap();
             }
             //
@@ -87,7 +87,7 @@ public class MusicPlayer {
                     player.playSound(SoundEvents.MUSIC_DISC_MELLOHI.value(), AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Mellohi"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_mellohi"));
                 incrementMusicNumberAndWrap();
             }
             //FEELING
@@ -96,7 +96,7 @@ public class MusicPlayer {
                     player.playSound(FEELING, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing A Feeling Like Never Before"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_feeling"));
                 incrementMusicNumberAndWrap();
             }
             //HOMESICK
@@ -105,7 +105,7 @@ public class MusicPlayer {
                     player.playSound(HOMESICK, AutomaticElytraConfig.HANDLER.instance().volume, 1.0f);
                     isPlayingMusic = true;
                 }
-                player.sendOverlayMessage(Component.literal("Playing Homesick"));
+                player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.playing_homesick"));
                 incrementMusicNumberAndWrap();
             }
 
@@ -120,7 +120,7 @@ public class MusicPlayer {
                     || isSoundPlaying(HOMESICK.location(), Minecraft.getInstance().getSoundManager().soundEngine);
         }
         else {
-            Minecraft.getInstance().player.sendOverlayMessage(Component.literal("Music cannot play; your master volume is 0%"));
+            Minecraft.getInstance().player.sendOverlayMessage(Component.translatable("msg.autoinfelytra.music.volume_zero"));
         }
     }
 

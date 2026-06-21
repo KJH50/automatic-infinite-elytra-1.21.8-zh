@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +42,7 @@ public class HUDHelper {
         service.shutdownNow();
         service = Executors.newSingleThreadScheduledExecutor();
     }
-    public static ArrayList<String> generateHUD(ArrayList<String> hudArray, int HUD_ELEMENTS){
+    public static ArrayList<Component> generateHUD(ArrayList<Component> hudArray, int HUD_ELEMENTS){
         assert minecraftClient.player != null;
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         /*if(!isRunning) executorService.submit(() -> {
@@ -50,21 +51,21 @@ public class HUDHelper {
         executorService.shutdown();*/
 
         ItemStack itemStack = minecraftClient.player.getItemBySlot(EquipmentSlot.CHEST);
-        String[] hudString = new String[HUD_ELEMENTS];
-        if (hudArray == null) hudArray = new ArrayList<String>();
+        Component[] hudString = new Component[HUD_ELEMENTS];
+        if (hudArray == null) hudArray = new ArrayList<Component>();
         else hudArray.clear();
 
-        if(AutomaticElytraConfig.HANDLER.instance().render_flight_mode) hudString[0] = "Flight mode: " + (autoFlight ? "Automatic" : "Manual");
-        if(Autopilot.isLanding()) hudString[0] = hudString[0] + " Landing";
-        if(Autopilot.isAutopilotRunning()) hudString[0] = hudString[0] + ", Autopilot running";
+        if(AutomaticElytraConfig.HANDLER.instance().render_flight_mode) hudString[0] = Component.translatable("hud.autoinfelytra.flight_mode", autoFlight ? Component.translatable("hud.autoinfelytra.mode.automatic") : Component.translatable("hud.autoinfelytra.mode.manual"));
+        if(Autopilot.isLanding()) hudString[0] = Component.translatable("hud.autoinfelytra.flight_mode.landing", hudString[0]);
+        if(Autopilot.isAutopilotRunning()) hudString[0] = Component.translatable("hud.autoinfelytra.autopilot.running", hudString[0]);
 
-        if(AutomaticElytraConfig.HANDLER.instance().render_altitude) hudString[1] = "Altitude: " + altitude;
-        if(AutomaticElytraConfig.HANDLER.instance().render_speed) hudString[2] = "Speed: " + String.format("%.2f", getCurrentVelocity() * 20) + " m/s";
-        if(AutomaticElytraConfig.HANDLER.instance().render_elytra_durability) hudString[3] = "Elytra Durability: " + String.valueOf(itemStack.getMaxDamage() - itemStack.getDamageValue());
-        if(Autopilot.isAutopilotRunning() && AutomaticElytraConfig.HANDLER.instance().render_autopilot_coords) hudString[4] = "Autopilot: " + Autopilot.getDestination().getX() + " " + Autopilot.getDestination().getZ() + " (" + Math.round(Math.pow(Autopilot.getDestination().distSqr(minecraftClient.player.blockPosition()), 0.5)) + ")";
+        if(AutomaticElytraConfig.HANDLER.instance().render_altitude) hudString[1] = Component.translatable("hud.autoinfelytra.altitude", altitude);
+        if(AutomaticElytraConfig.HANDLER.instance().render_speed) hudString[2] = Component.translatable("hud.autoinfelytra.speed", String.format("%.2f", getCurrentVelocity() * 20));
+        if(AutomaticElytraConfig.HANDLER.instance().render_elytra_durability) hudString[3] = Component.translatable("hud.autoinfelytra.durability", itemStack.getMaxDamage() - itemStack.getDamageValue());
+        if(Autopilot.isAutopilotRunning() && AutomaticElytraConfig.HANDLER.instance().render_autopilot_coords) hudString[4] = Component.translatable("hud.autoinfelytra.autopilot_coords", Autopilot.getDestination().getX(), Autopilot.getDestination().getZ(), (int)Math.round(Math.pow(Autopilot.getDestination().distSqr(minecraftClient.player.blockPosition()), 0.5)));
 
         for(int i = 0; i < HUD_ELEMENTS; i++){
-            if(hudString[i] != null && !hudString[i].isEmpty()) hudArray.add(hudString[i]);
+            if(hudString[i] != null) hudArray.add(hudString[i]);
         }
         return hudArray;
     }

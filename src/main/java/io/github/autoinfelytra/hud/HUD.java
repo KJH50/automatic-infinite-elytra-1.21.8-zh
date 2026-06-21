@@ -1,4 +1,4 @@
-package io.github.autoinfelytra.hud;
+﻿package io.github.autoinfelytra.hud;
 
 import io.github.autoinfelytra.AutomaticInfiniteElytraClient;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
@@ -6,8 +6,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-//import net.minecraft.client.gui.GuiGraphics; Missing type, I cannot find it
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class HUD {
     public static final int YELLOW_HUD_COLOR = 0xFFFFFF55;
     public static final int GREEN_HUD_COLOR = 0xFF55FF55;
 
-    public static ArrayList<String> hudArray;
+    public static ArrayList<Component> hudArray;
     public static int hudColor = RED_HUD_COLOR;
     public static final int HUD_ELEMENTS = 5;
 
@@ -88,3 +88,4 @@ public class HUD {
                 true);
     }
 }
+
