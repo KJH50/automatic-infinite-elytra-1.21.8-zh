@@ -85,7 +85,7 @@
   "hud.autoinfelytra.altitude": "高度：%d",
   "hud.autoinfelytra.autopilot.running": "§a自动驾驶已启用",
   "hud.autoinfelytra.autopilot_coords": "自动驾驶坐标：%d, %d, %d",
-  "hud.autoinfelytra.durability": "耐久度：%d / %d",
+  "hud.autoinfelytra.durability": "耐久度：%d",
   "hud.autoinfelytra.flight_mode": "§e飞行模式：%s",
   "hud.autoinfelytra.flight_mode.landing": "§a降落",
   "hud.autoinfelytra.mode.automatic": "§a自动",
