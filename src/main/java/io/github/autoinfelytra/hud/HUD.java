@@ -1,4 +1,4 @@
-﻿package io.github.autoinfelytra.hud;
+package io.github.autoinfelytra.hud;
 
 import io.github.autoinfelytra.AutomaticInfiniteElytraClient;
 import io.github.autoinfelytra.config.AutomaticElytraConfig;
