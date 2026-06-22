@@ -1,4 +1,4 @@
-﻿package io.github.autoinfelytra.autopilot;
+package io.github.autoinfelytra.autopilot;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
