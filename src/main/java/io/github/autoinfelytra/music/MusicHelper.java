@@ -3,8 +3,6 @@ package io.github.autoinfelytra.music;
 import io.github.autoinfelytra.AutomaticInfiniteElytraClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 //import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -13,6 +11,6 @@ import net.minecraft.sounds.SoundEvent;
 public class MusicHelper {
     public static SoundEvent registerSoundEvent(String name){
         Identifier id = Identifier.fromNamespaceAndPath(AutomaticInfiniteElytraClient.MOD_ID, name);
-        return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
+        return SoundEvent.createVariableRangeEvent(id);
     }
 }
